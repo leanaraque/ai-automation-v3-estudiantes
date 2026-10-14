@@ -1,0 +1,94 @@
+{
+  "name": "Clínica · Fichas · paso 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e24e34e9-d039-511e-a938-6bc9c0981e4b",
+      "name": "Al hacer clic en Probar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "f97ea50a-f7c3-5063-bae3-4a2b8a8b2b13",
+      "name": "Leer pacientes",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://raw.githubusercontent.com/leanaraque/ai-automation-v3-estudiantes/main/api/pacientes/{{ $json.ID }}.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "36cd23f1-d02d-5a8d-8dd7-6ac79020306f",
+      "name": "Pedir la ficha al sistema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Al hacer clic en Probar": {
+      "main": [
+        [
+          {
+            "node": "Leer pacientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer pacientes": {
+      "main": [
+        [
+          {
+            "node": "Pedir la ficha al sistema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

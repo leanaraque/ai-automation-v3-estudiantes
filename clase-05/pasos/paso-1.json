@@ -1,0 +1,63 @@
+{
+  "name": "Clínica · Fichas · paso 1",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e24e34e9-d039-511e-a938-6bc9c0981e4b",
+      "name": "Al hacer clic en Probar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "f97ea50a-f7c3-5063-bae3-4a2b8a8b2b13",
+      "name": "Leer pacientes",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Al hacer clic en Probar": {
+      "main": [
+        [
+          {
+            "node": "Leer pacientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

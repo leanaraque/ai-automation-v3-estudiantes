@@ -1,0 +1,333 @@
+{
+  "name": "Clínica · Fichas · desafío extra",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e24e34e9-d039-511e-a938-6bc9c0981e4b",
+      "name": "Al hacer clic en Probar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "f97ea50a-f7c3-5063-bae3-4a2b8a8b2b13",
+      "name": "Leer pacientes",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a6855b28-4bb9-5192-beb3-6a38c8cfff79",
+              "leftValue": "={{ $json.Nombre }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "995f330d-af48-5154-99a0-388f51a426fd",
+      "name": "Solo fichas incompletas",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://raw.githubusercontent.com/leanaraque/ai-automation-v3-estudiantes/main/api/pacientes/{{ $json.ID }}.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "36cd23f1-d02d-5a8d-8dd7-6ac79020306f",
+      "name": "Pedir la ficha al sistema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        660,
+        0
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "Nombre": "={{ $json.nombre }}",
+            "Edad": "={{ $json.edad }}",
+            "Obra social": "={{ $json.obra_social }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Edad",
+              "displayName": "Edad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Obra social",
+              "displayName": "Obra social",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "61947120-dcbb-523c-98ca-d6c9a2f81971",
+      "name": "Completar la ficha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        880,
+        -100
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "fichas",
+        "options": {}
+      },
+      "id": "97e704c0-8d13-527c-87ec-49dbd7718ecf",
+      "name": "Juntar las fichas completadas",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "tu-correo@gmail.com",
+        "subject": "=Fichas completadas: {{ $json.fichas.length }}",
+        "emailType": "text",
+        "message": "=Hola, Dra. Benítez:\n\nEl sistema completó estas fichas en la planilla:\n{{ $json.fichas.map(f => '- ' + f.ID + ': ' + f.Nombre).join('\\n') }}\n\nAsistente de la clínica",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "457ab07e-6a61-5aa9-8a91-78b1c9c18eb3",
+      "name": "Avisar a la Dra. Benítez",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1320,
+        -100
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail"
+        }
+      },
+      "webhookId": "7bbee7db-2dbf-5592-9714-c1a55f935172"
+    },
+    {
+      "parameters": {
+        "sendTo": "tu-correo@gmail.com",
+        "subject": "=No se encontró la ficha {{ $json.ID }}",
+        "emailType": "text",
+        "message": "=Hola, Dra. Benítez:\n\nEl sistema de fichas no tiene el paciente {{ $json.ID }}. Hay que revisarlo a mano.\n\nAsistente de la clínica",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "5a2cc44a-92e9-5950-bdc2-d6be86573fbd",
+      "name": "Avisar ficha no encontrada",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        120
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail"
+        }
+      },
+      "webhookId": "b6fe361c-bdac-583b-b016-eddaeb2cf6a9"
+    }
+  ],
+  "connections": {
+    "Al hacer clic en Probar": {
+      "main": [
+        [
+          {
+            "node": "Leer pacientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer pacientes": {
+      "main": [
+        [
+          {
+            "node": "Solo fichas incompletas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solo fichas incompletas": {
+      "main": [
+        [
+          {
+            "node": "Pedir la ficha al sistema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedir la ficha al sistema": {
+      "main": [
+        [
+          {
+            "node": "Completar la ficha",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avisar ficha no encontrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Completar la ficha": {
+      "main": [
+        [
+          {
+            "node": "Juntar las fichas completadas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar las fichas completadas": {
+      "main": [
+        [
+          {
+            "node": "Avisar a la Dra. Benítez",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}
