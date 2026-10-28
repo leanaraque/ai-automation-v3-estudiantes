@@ -1,19 +1,19 @@
-# AI Automation · Módulos 5 a 8
+# AI Automation · Módulos 6 a 8
 
-Material de las Clases 5 a 8 del curso AI Automation de Coderhouse: Google, AI Agent, IA local con Ollama y WhatsApp.
+Material de las Clases 6 a 8 del curso AI Automation de Coderhouse: AI Agent, IA local con Ollama y WhatsApp. La carpeta de la Clase 5 queda como material de repaso del Módulo 5.
 
 Todo gira alrededor de un solo caso, la **Clínica Dental del Parque**: un consultorio que recibe 60 mensajes de WhatsApp por día y quiere un asistente que conteste, anote turnos y avise. Vos aplicás el mismo método a tu propio proceso en las preentregas y el proyecto final.
 
 ## Antes de empezar
 
-Seguí [antes-de-la-clase-5.md](antes-de-la-clase-5.md): cuenta de Google personal, clave de Groq y cuenta de n8n Cloud.
+Seguí [antes-de-la-clase-6.md](antes-de-la-clase-6.md): cuenta de Google personal, clave de Groq y cuenta de n8n Cloud.
 
 ## Clases
 
 | Clase | Fecha | Tema | Carpeta |
 |---|---|---|---|
-| 5 | lunes 26/10 | Planificar y conectar Google | [clase-05](clase-05/) |
-| 6 | miércoles 28/10 | AI Agent | (próximamente) |
+| 5 | (repaso) | Planificar y conectar Google: material de repaso del Módulo 5 | [clase-05](clase-05/) |
+| 6 | miércoles 28/10 | AI Agent | [clase-06](clase-06/) |
 | 7 | lunes 2/11 | IA local con Ollama | (próximamente) |
 | 8 | miércoles 4/11 | WhatsApp Business | (próximamente) |
 
